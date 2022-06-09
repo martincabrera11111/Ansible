@@ -1,0 +1,54 @@
+---
+- hosts: ServidoresCentOS7
+  tasks:
+
+    - name: Instalar repositorio epel
+      yum:
+        name:
+          - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
+
+    - name: Instalar paquetes necesarios
+      yum:
+        name:
+          - mlocate
+          - wget
+
+    - name: Instalar editores de textto
+      yum:
+        name:
+          - vim
+
+    - name: Instalar paquete de versionado de codigo
+      yum:
+        name:
+          - git
+    
+    - name: Instalador de paquete de conetenedores de docker
+      yum:
+        name:
+          - docker
+
+    - name: Download sources
+      get_url:
+         url: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+         dest: /opt/mysql
+
+    - name: Install package
+      yum:
+        name: /opt/mysql/mysql-community-release-el7-5.noarch.rpm
+        state: present
+
+
+    - name: Install MySQL
+      yum: 
+        name: 
+            mysql-server state=installed
+   
+    - name: Configurar zona horaria
+      timezone:
+        name: America/Montevideo
+
+
+  become: true
+  become_user: root
